@@ -20,17 +20,33 @@ class HeroesRepositoryImpl : HeroesRepository {
                 callback.onErrorResponse(null)
             }
 
+            override fun onHeroKO() {
+                // Not used
+            }
+
+            override fun onHeroOK(hero: Hero) {
+                // Not used
+            }
+
         }, offset)
     }
 
     override fun getHero(callback: ApiCallback<Hero, Error>, characterId: String) {
         marvelInteractor.getHero(object : MarvelCallback {
             override fun onHeroesListOK(list: MutableList<Hero>) {
-
+                // Not used
             }
 
             override fun onHeroesListKO() {
+                // Not used
+            }
 
+            override fun onHeroKO() {
+                callback.onErrorResponse(null)
+            }
+
+            override fun onHeroOK(hero: Hero) {
+                callback.onResponse(hero)
             }
 
         }, characterId)

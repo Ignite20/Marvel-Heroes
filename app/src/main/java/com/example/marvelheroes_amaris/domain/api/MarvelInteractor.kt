@@ -27,16 +27,25 @@ class MarvelInteractor {
     }
 
     fun getHero(callback: MarvelCallback, characterId: String) {
-        val response = retrofitClient.service.getHero(
+
+        retrofitClient.service.getHero(
             hash = calculateMarvelMD5(),
             characterId = characterId
-        ).execute()
-
-        if (response.isSuccessful) {
-            response.body()?.data?.let {
-                it.results[0]
+        ).enqueue(object : Callback<MarvelRoot> {
+            override fun onResponse(call: Call<MarvelRoot>, response: Response<MarvelRoot>) {
+                if (response.isSuccessful) {
+                    response.body()?.data?.let {
+                        callback.onHeroOK(it.results.first())
+                    }
+                }
             }
-        }
+
+            override fun onFailure(call: Call<MarvelRoot>, t: Throwable) {
+                callback.onHeroKO()
+            }
+        })
+
+
     }
 
     private fun calculateMarvelMD5(): String {

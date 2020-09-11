@@ -19,5 +19,9 @@
         android:id="@+id/heroeDetailFragment"
         android:name="com.example.marvelheroes_amaris.ui.heroes_detail.HeroeDetailFragment"
         android:label="heroe_detail_fragment"
-        tools:layout="@layout/heroe_detail_fragment" />
+        tools:layout="@layout/heroe_detail_fragment">
+        <argument
+            android:name="heroId"
+            app:argType="string" />
+    </fragment>
 </navigation>

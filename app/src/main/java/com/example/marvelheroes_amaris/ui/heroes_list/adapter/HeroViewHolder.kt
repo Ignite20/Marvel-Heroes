@@ -9,7 +9,8 @@ import com.example.marvelheroes_amaris.R
 import com.example.marvelheroes_amaris.domain.models.Hero
 import kotlinx.android.synthetic.main.hero_item.view.*
 
-class HeroViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class HeroViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView.rootView) {
+
 
     companion object {
         fun from(viewGroup: ViewGroup?): HeroViewHolder {
@@ -19,10 +20,11 @@ class HeroViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         }
     }
 
-    fun bind(hero: Hero) {
+    fun bind(hero: Hero): HeroViewHolder {
         itemView.tv_character_name.text = hero.name
         Glide.with(itemView.context)
             .load(hero.thumbnail.path.plus(".").plus(hero.thumbnail.extension)).centerCrop()
             .into(itemView.iv_hero)
+        return this
     }
 }

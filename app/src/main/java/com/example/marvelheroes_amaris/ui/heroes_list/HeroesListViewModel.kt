@@ -15,6 +15,8 @@ class HeroesListViewModel : BaseViewModel() {
     val uiData = MediatorLiveData<List<Hero>>()
     val heroes: LiveData<List<Hero>> = uiData
 
+    var mList: MutableList<Hero> = mutableListOf()
+
     private val repo: HeroesRepository = HeroesRepositoryImpl()
     private val heroesUseCase: HeroesUseCase = HeroesUseCaseImplementation(repo)
 
@@ -41,6 +43,7 @@ class HeroesListViewModel : BaseViewModel() {
     fun createAndPostHeroes(response: List<Hero>) {
         viewModelScope.launch {
             uiData.postValue(response)
+            mList.addAll(response)
         }
     }
 }

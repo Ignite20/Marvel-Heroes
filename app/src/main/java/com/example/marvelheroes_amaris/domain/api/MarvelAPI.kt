@@ -24,10 +24,10 @@ interface MarvelAPI {
 
     @GET("/v1/public/characters/{characterId}")
     fun getHero(
+        @Path("characterId") characterId: String,
         @Query("apikey") authorization: String? = PUBLIC_KEY,
         @Query("hash") hash: String,
-        @Query("ts") ts: String? = TS,
-        @Path("characterId") characterId: String
+        @Query("ts") ts: String? = TS
     ): Call<MarvelRoot>
 
 
