@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/heroesListFragment">
+
+
+    <fragment
+        android:id="@+id/heroesListFragment"
+        android:name="com.example.marvelheroes_amaris.ui.heroes_list.HeroesListFragment"
+        android:label="heroes_list_fragment"
+        tools:layout="@layout/heroes_list_fragment">
+        <action
+            android:id="@+id/action_heroesListFragment_to_heroeDetailFragment"
+            app:destination="@id/heroeDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/heroeDetailFragment"
+        android:name="com.example.marvelheroes_amaris.ui.heroes_detail.HeroeDetailFragment"
+        android:label="heroe_detail_fragment"
+        tools:layout="@layout/heroe_detail_fragment" />
+</navigation>
