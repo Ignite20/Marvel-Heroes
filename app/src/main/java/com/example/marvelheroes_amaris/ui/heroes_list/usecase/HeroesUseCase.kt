@@ -1,5 +1,6 @@
 package com.example.marvelheroes_amaris.ui.heroes_list.usecase
 
+import com.example.marvelheroes_amaris.common.ErrorMessage
 import com.example.marvelheroes_amaris.domain.models.Hero
 import com.example.marvelheroes_amaris.domain.repository.HeroesRepository
 import com.example.marvelheroes_amaris.domain.usecase.HeroesUseCaseContract
@@ -10,6 +11,7 @@ interface HeroesUseCase : HeroesUseCaseContract
 class HeroesUseCaseImplementation(var repository: HeroesRepository) : HeroesUseCase {
 
     override val heroesResponse = SingleUseCaseImplementation<List<Hero>>()
+    override val errorResponse = SingleUseCaseImplementation<ErrorMessage>()
     override val heroResponse = SingleUseCaseImplementation<Hero>()
 
     override fun getHeroes(offset: Int) {

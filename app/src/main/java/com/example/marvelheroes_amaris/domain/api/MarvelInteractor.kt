@@ -1,13 +1,14 @@
 package com.example.marvelheroes_amaris.domain.api
 
+import com.example.marvelheroes_amaris.common.ErrorSomethingWentWrong
+import com.example.marvelheroes_amaris.common.calculateMD5
 import com.example.marvelheroes_amaris.domain.models.MarvelRoot
-import com.example.marvelheroes_amaris.utils.md5
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MarvelInteractor {
-    private var retrofitClient = RetrofitClient()
+class MarvelInteractor(val retrofitClient: RetrofitClient) {
+    //private var retrofitClient = RetrofitClient()
 
     fun getHeroes(callback: MarvelCallback, offset: Int = 0) {
         retrofitClient.service.getHeroes(
@@ -21,7 +22,7 @@ class MarvelInteractor {
             }
 
             override fun onFailure(call: Call<MarvelRoot>, t: Throwable) {
-                callback.onHeroesListKO()
+                callback.onHeroesListKO(ErrorSomethingWentWrong)
             }
         })
     }
@@ -41,17 +42,13 @@ class MarvelInteractor {
             }
 
             override fun onFailure(call: Call<MarvelRoot>, t: Throwable) {
-                callback.onHeroKO()
+                callback.onHeroKO(ErrorSomethingWentWrong)
             }
         })
 
 
     }
 
-    private fun calculateMarvelMD5(): String {
-        val stringBuilder = StringBuilder(
-            MarvelAPI.TS.plus(MarvelAPI.PRIVATE_KEY).plus(MarvelAPI.PUBLIC_KEY)
-        )
-        return stringBuilder.toString().md5()
-    }
+    private fun calculateMarvelMD5() =
+        calculateMD5(MarvelAPI.TS, MarvelAPI.PRIVATE_KEY, MarvelAPI.PUBLIC_KEY)
 }

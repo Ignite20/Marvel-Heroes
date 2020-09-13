@@ -5,13 +5,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.marvelheroes_amaris.domain.models.Hero
 
 class HeroesAdapter(
-    var onItemClick: OnItemClick? = null,
+    var heroesCallback: HeroesCallback? = null,
     val list: MutableList<Hero>
 ) : RecyclerView.Adapter<HeroViewHolder>() {
 
-    interface OnItemClick {
+    interface HeroesCallback {
         fun onHeroClick(hero: Hero)
-        fun onListLoaded()
+        fun onHeroesLoaded()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HeroViewHolder {
@@ -21,7 +21,7 @@ class HeroesAdapter(
     override fun onBindViewHolder(holder: HeroViewHolder, position: Int) {
         holder.bind(list[position]).apply {
             itemView.setOnClickListener {
-                onItemClick?.onHeroClick(list[position])
+                heroesCallback?.onHeroClick(list[position])
             }
         }
     }
@@ -30,9 +30,9 @@ class HeroesAdapter(
         return list.size
     }
 
-    fun addMore(moreList: MutableList<Hero>, notify: Boolean) {
+    fun addMore(moreList: MutableList<Hero>) {
         list.addAll(moreList)
         notifyDataSetChanged()
-        if (notify) onItemClick?.onListLoaded()
+        heroesCallback?.onHeroesLoaded()
     }
 }

@@ -1,6 +1,7 @@
 package com.example.marvelheroes_amaris.ui.heroes_list
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +16,7 @@ import com.example.marvelheroes_amaris.domain.models.Hero
 import com.example.marvelheroes_amaris.ui.heroes_list.adapter.HeroesAdapter
 import kotlinx.android.synthetic.main.heroes_list_fragment.*
 
-class HeroesListFragment : Fragment(), HeroesAdapter.OnItemClick {
+class HeroesListFragment : Fragment(), HeroesAdapter.HeroesCallback {
 
     private lateinit var viewModel: HeroesListViewModel
     private lateinit var adapter: HeroesAdapter
@@ -38,9 +39,9 @@ class HeroesListFragment : Fragment(), HeroesAdapter.OnItemClick {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         prepareRecycler()
         if (viewModel.mList.size > 0) {
-            adapter.addMore(viewModel.mList, false)
+            fillRecycler(viewModel.mList)
         } else {
-            viewModel.getHeroes()
+            viewModel.getHeroes(adapter.itemCount)
         }
         observeData()
     }
@@ -54,41 +55,39 @@ class HeroesListFragment : Fragment(), HeroesAdapter.OnItemClick {
         }
         rvHeroes.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                if (newState == RecyclerView.SCROLL_STATE_SETTLING) {
-                    if (layoutManager.findLastVisibleItemPosition() == adapter.itemCount - 1) {
-                        rvHeroes.postDelayed({
-                            if (loadMore) {
-                                viewModel.getHeroes(adapter.itemCount)
-                                loadMore = false
-                            }
-                        }, 50)
-                    }
-                }
+
             }
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-
+                Log.d("LIST DY", dy.toString())
+                if (dy != 0 && layoutManager.findLastCompletelyVisibleItemPosition() == adapter.itemCount - 1) {
+                    Log.d("LIST", "ATTEMPT TO LOAD MORE")
+                    if (loadMore) {
+                        Log.d("LIST", "LOADED MORE CALLED")
+                        viewModel.getHeroes(adapter.itemCount)
+                        loadMore = false
+                    }
+                }
             }
         })
     }
 
     private fun observeData() {
         viewModel.heroes.observe(this.viewLifecycleOwner, {
+            if (it.isEmpty()) Toast.makeText(requireContext(), "Oops!", Toast.LENGTH_SHORT).show()
             fillRecycler(it.toMutableList())
         })
     }
 
     private fun fillRecycler(list: MutableList<Hero>) {
-        adapter.addMore(list, true)
+        adapter.addMore(list)
+
     }
 
     override fun onPause() {
         super.onPause()
+        loadMore = false
         viewModel.heroes.removeObservers(this.viewLifecycleOwner)
-    }
-
-    override fun onListLoaded() {
-        loadMore = true
     }
 
     override fun onHeroClick(hero: Hero) {
@@ -98,6 +97,10 @@ class HeroesListFragment : Fragment(), HeroesAdapter.OnItemClick {
                 hero.id
             )
         )
+    }
+
+    override fun onHeroesLoaded() {
+        loadMore = true
     }
 
 }

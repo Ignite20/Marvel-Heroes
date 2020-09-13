@@ -9,7 +9,7 @@ import retrofit2.http.Query
 interface MarvelAPI {
 
     companion object {
-        const val TS = "13"
+        const val TS = "14"
         const val PRIVATE_KEY = "6530af65d5d619e34718e094a28e22e70306ee7a"
         const val PUBLIC_KEY = "4b012176f192fcc1fe00b6b5ca04253e"
     }
