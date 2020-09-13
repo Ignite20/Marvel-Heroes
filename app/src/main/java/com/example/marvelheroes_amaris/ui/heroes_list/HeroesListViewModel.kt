@@ -21,6 +21,7 @@ class HeroesListViewModel : BaseViewModel() {
 
     var mList: MutableList<Hero> = mutableListOf()
 
+    // The lines below can be opted out in a Module if Dagger is implemented
     private val retrofitClient = RetrofitClient()
     private val marvelInteractor = MarvelInteractor(retrofitClient)
     private val repo: HeroesRepository = HeroesRepositoryImpl(marvelInteractor)
@@ -43,7 +44,7 @@ class HeroesListViewModel : BaseViewModel() {
                 createAndPostHeroes(response)
             }
             addSource(heroesUseCase.errorResponse.data) {
-
+                uiData.postError(mutableListOf())
             }
         }
     }

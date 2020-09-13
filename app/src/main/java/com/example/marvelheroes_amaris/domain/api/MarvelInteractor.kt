@@ -8,7 +8,6 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class MarvelInteractor(val retrofitClient: RetrofitClient) {
-    //private var retrofitClient = RetrofitClient()
 
     fun getHeroes(callback: MarvelCallback, offset: Int = 0) {
         retrofitClient.service.getHeroes(
